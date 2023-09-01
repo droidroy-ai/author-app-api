@@ -85,9 +85,9 @@ class Content(models.Model):
     """Content objects created by user"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
-    body = models.CharField(max_length=255)
+    body = models.CharField(max_length=255, blank=True)
     summary = models.CharField(max_length=255)
     document = models.FileField(upload_to=upload_file_path, null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.title
+        return str(self.title)
