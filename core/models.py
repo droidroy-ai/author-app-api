@@ -6,6 +6,8 @@ from django.contrib.auth.models import (
 )
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 
+import os
+from datetime import datetime
 
 class UserManager(BaseUserManager):
     """Manager for users."""
@@ -63,3 +65,29 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+def get_filename_ext(filepath):
+    base_name = os.path.basename(filepath)
+    name, ext = os.path.splitext(base_name)
+    return name, ext
+
+def upload_file_path(instance, filename):
+    print(instance)
+    print(filename)
+    current_unix = int(datetime.now().timestamp())
+    name, ext = get_filename_ext(filename)
+    final_filename = f"{name}_{current_unix}{ext}"
+    return f"pdfs/{final_filename}"
+
+
+class Content(models.Model):
+    """Content objects created by user"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=30)
+    body = models.CharField(max_length=255)
+    summary = models.CharField(max_length=255)
+    document = models.FileField(upload_to=upload_file_path, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.title
