@@ -8,9 +8,9 @@ from core import models
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users"""
     ordering = ['id']
-    list_display = ['email', 'name']
+    list_display = ['email', 'fullname', 'role']
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'password', 'fullname', 'phone')}),
         (
             _('Permissions'),
             {
@@ -18,6 +18,18 @@ class UserAdmin(BaseUserAdmin):
                     'is_active',
                     'is_staff',
                     'is_superuser',
+                    'role',
+                )
+            }
+        ),
+        (
+            _('Details'),
+            {
+                'fields': (
+                    'city',
+                    'state',
+                    'country',
+                    'pincode',
                 )
             }
         ),
@@ -31,7 +43,9 @@ class UserAdmin(BaseUserAdmin):
                 'email',
                 'password1',
                 'password2',
-                'name',
+                'fullname',
+                'phone',
+                'role',
                 'is_active',
                 'is_staff',
                 'is_superuser',
